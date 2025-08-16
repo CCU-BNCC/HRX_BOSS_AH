@@ -6,6 +6,7 @@ import sys
 import signal
 import os
 from urllib.parse import urlparse
+import argparse
 
 __version__ = "1.0.1"
 
@@ -62,7 +63,7 @@ def send_request(target, data, extra_headers):
             response = requests.get(target + sep + param, headers=headers, timeout=5)
         with requests_lock:
             requests_sent += 1
-    except Exception as e:
+    except Exception:
         with requests_lock:
             requests_sent += 1
 
@@ -71,17 +72,16 @@ def worker(target, data, headers_list):
         send_request(target, data, headers_list)
 
 def main():
-    import argparse
-    parser = argparse.ArgumentParser(description="Tony Stark Python Version")
+    parser = argparse.ArgumentParser(description="HRXBoss Python Version")
     parser.add_argument("-site", required=True, help="Destination site (must be provided)")
     parser.add_argument("-data", default="", help="Data to POST (optional)")
     parser.add_argument("-header", action='append', default=[], help="Extra headers")
     parser.add_argument("-version", action='store_true', help="Print version")
     args = parser.parse_args()
     if args.version:
-        print("Tony Stark Python Tool v", __version__)
+        print("HRXBoss Python Tool v", __version__)
         sys.exit(0)
-    print("Tony Stark Python Tool v", __version__)
+    print("HRXBoss Python Tool v", __version__)
     print("Starting requests...")
     def signal_handler(sig, frame):
         print(f"\nInterrupted by user. Total requests sent: {requests_sent}")
